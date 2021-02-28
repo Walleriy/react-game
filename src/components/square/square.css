@@ -15,4 +15,5 @@
 
 .square:focus {
     outline: none;
+    background: #ddd;
 }
