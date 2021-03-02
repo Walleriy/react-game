@@ -1,0 +1,14 @@
+.game {
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.game-info {
+    margin-left: 20px;
+}
+
+ol, ul {
+    padding-left: 30px;
+}
+
