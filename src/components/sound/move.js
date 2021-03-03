@@ -7,6 +7,7 @@ const MoveSound = () => {
         <Sound
             url={win}
             playStatus={Sound.status.PLAYING}
+            playFromPosition={10}
         />
     );
 }
