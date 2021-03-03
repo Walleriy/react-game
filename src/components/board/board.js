@@ -8,7 +8,10 @@ export default class Board extends React.Component {
         return (
             <Square
                 value={this.props.squares[i]}
-                onClick={() => this.props.onClick(i)}
+                onClick={(e) => {
+                    this.props.onClick(i)
+                    e.target.blur();
+                }}
                 id = {i}
             />
         );
