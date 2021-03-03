@@ -5,17 +5,14 @@ import KeyboardEvent from "../keyboardEvent";
 import WinSound from "../sound/win";
 import MoveSound from "../sound/move";
 import DrawSound from "../sound/draw";
+import LocalStorage from "../../services/localStorage";
 
 export default class Game extends React.Component {
+    localStorage1 = new LocalStorage();
+
     constructor(props) {
         super(props);
-        this.state = {
-            history: [{
-                squares: Array(9).fill(null),
-            }],
-            stepNumber: 0,
-            xIsNext: true
-        };
+        this.state = this.localStorage1.getGameState();
     }
 
     handleClick = (i) => {
@@ -33,6 +30,10 @@ export default class Game extends React.Component {
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext
         });
+        this.setState((state) => {
+            console.log(state);
+            this.localStorage1.setGameState(state);
+        })
     }
 
     calculateWinner = (squares) => {
@@ -92,7 +93,7 @@ export default class Game extends React.Component {
         if (winner) {
             status = 'Winner: ' + winner;
             sound = <WinSound />
-        } else if (current.squares.filter(value => value === null).length === 0) {
+        } else if (current.squares.filter(value => value !== 'X' && value !== 'O').length === 0) {
             status = "Draw!";
             sound = <DrawSound />
         } else {
