@@ -2,6 +2,9 @@ import React from "react";
 import './game.css'
 import Board from "../board";
 import KeyboardEvent from "../keyboardEvent";
+import WinSound from "../sound/win";
+import MoveSound from "../sound/move";
+import DrawSound from "../sound/draw";
 
 export default class Game extends React.Component {
     constructor(props) {
@@ -59,12 +62,8 @@ export default class Game extends React.Component {
         });
     }
 
-    render() {
-        const history = this.state.history;
-        const current = history[this.state.stepNumber];
-        const winner = this.calculateWinner(current.squares);
-
-        const moves = history.map((step, move) => {
+    movesHistory (history) {
+        return  history.map((step, move) => {
             const description = move ?
                 'Go to move #' + move :
                 'Go to game start';
@@ -74,20 +73,37 @@ export default class Game extends React.Component {
                 </li>
             );
         });
+    }
+
+    render() {
+        const history = this.state.history;
+        const current = history[this.state.stepNumber];
+        const winner = this.calculateWinner(current.squares);
+
+        const moves = this.movesHistory(history);
 
         let status;
+        let sound;
+        if(this.state.stepNumber !== 0) {
+            sound = <MoveSound />
+        }
+
         let clazz = 'game ';
         if (winner) {
             status = 'Winner: ' + winner;
+            sound = <WinSound />
         } else if (current.squares.filter(value => value === null).length === 0) {
-            status = "Draw!"
+            status = "Draw!";
+            sound = <DrawSound />
         } else {
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
             clazz = clazz   + (this.state.xIsNext ? 'game__player-x' : 'game__player-y');
         }
 
+
         return (
             <div className={clazz}>
+                {sound}
 
                 <div className="game__player">
                     <KeyboardEvent
