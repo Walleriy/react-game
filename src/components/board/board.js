@@ -1,5 +1,6 @@
 import React from 'react'
 import Square from "../square";
+import './board.css'
 
 export default class Board extends React.Component {
 
@@ -8,29 +9,36 @@ export default class Board extends React.Component {
             <Square
                 value={this.props.squares[i]}
                 onClick={() => this.props.onClick(i)}
+                id = {i}
             />
         );
     }
 
+    createBoard (rowsNumber, elementsNumber) {
+        const rows = []
+
+        for (let row = 0; row < rowsNumber; row++) {
+            const elements = []
+
+            for (let element = 0; element < elementsNumber; element++) {
+                elements.push(this.renderSquare(row*elementsNumber + element))
+            }
+            rows.push((
+                <div className="board__row">
+                    {elements}
+                </div>
+            ))
+        }
+
+        return rows;
+    }
+
     render() {
+
         return (
-            <div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
+            <div className="board">
+                {this.createBoard(3, 3)}
             </div>
-        );
+        )
     }
 }

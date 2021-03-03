@@ -1,4 +1,8 @@
-.board-row:after {
+.board {
+    border: 10px ridge rgba(170, 50, 220, .6);
+}
+
+.board__row:after {
     clear: both;
     content: "";
     display: table;

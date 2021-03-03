@@ -1,19 +1,30 @@
 .square {
-    background: #fff;
-    border: 1px solid #999;
-    float: left;
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 34px;
-    height: 100px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
-    text-align: center;
-    width: 100px;
+  position: relative;
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 18vh;
+  font-weight: bold;
+  line-height: 34px;
+  height: 20vh;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 20vh;
+}
+.square:focus {
+  outline: none;
+  background: #ddd;
+}
+.square:hover {
+  background: #bba;
+}
+.square__key {
+  position: absolute;
+  top: 0;
+  right: 5px;
+  font-size: 1rem;
 }
 
-.square:focus {
-    outline: none;
-    background: #ddd;
-}
+/*# sourceMappingURL=square.css.map */

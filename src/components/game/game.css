@@ -2,10 +2,23 @@
     margin: auto;
     display: flex;
     flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 2rem;
+    transition: all 1s ease-out;
 }
 
-.game-info {
+.game__info {
     margin-left: 20px;
+}
+
+.game__player-x {
+    background-color: green;
+}
+
+.game__player-y {
+    background-color: orangered;
 }
 
 ol, ul {

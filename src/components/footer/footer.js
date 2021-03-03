@@ -6,7 +6,7 @@ const Footer = () => {
     return (
         <footer className="footer">
             <div className="footer__item">
-                Developers:
+                Developers:{"\u00A0"}
                 <a
                     className="footer__link"
                     href={"https://github.com/Walleriy"}

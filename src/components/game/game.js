@@ -1,6 +1,7 @@
 import React from "react";
 import './game.css'
 import Board from "../board";
+import KeyboardEvent from "../keyboardEvent";
 
 export default class Game extends React.Component {
     constructor(props) {
@@ -64,35 +65,44 @@ export default class Game extends React.Component {
         const winner = this.calculateWinner(current.squares);
 
         const moves = history.map((step, move) => {
-            const desc = move ?
+            const description = move ?
                 'Go to move #' + move :
                 'Go to game start';
             return (
                 <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                    <button onClick={() => this.jumpTo(move)}>{description}</button>
                 </li>
             );
         });
 
         let status;
+        let clazz = 'game ';
         if (winner) {
             status = 'Winner: ' + winner;
+        } else if (current.squares.filter(value => value === null).length === 0) {
+            status = "Draw!"
         } else {
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+            clazz = clazz   + (this.state.xIsNext ? 'game__player-x' : 'game__player-y');
         }
 
         return (
-            <div className="game">
-                <div className="game-board">
-                    <Board
-                        squares={current.squares}
-                        onClick={(i) => this.handleClick(i)}
+            <div className={clazz}>
+
+                <div className="game__player">
+                    <KeyboardEvent
+                        onClick={this.handleClick}
                     />
+                    {status}
                 </div>
-                <div className="game-info">
-                    <div>{status}</div>
+                <Board
+                    squares={current.squares}
+                    onClick={(i) => this.handleClick(i)}
+                />
+                <div className="game__info">
                     <ol>{moves}</ol>
                 </div>
+
             </div>
         );
     }
