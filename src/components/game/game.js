@@ -6,37 +6,45 @@ import WinSound from "../sound/win";
 import MoveSound from "../sound/move";
 import DrawSound from "../sound/draw";
 import LocalStorage from "../../services/localStorage";
+import ArtificialIntelligence from "../../services/artificial-intelligence";
 
 export default class Game extends React.Component {
     localStorage1 = new LocalStorage();
+    ai = new ArtificialIntelligence('X');
 
     constructor(props) {
         super(props);
         this.state = this.localStorage1.getGameState();
     }
 
-    handleClick = (i) => {
+    handleClick = (i, player = 'user') => {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const squares = current.squares.slice();
-        if (this.calculateWinner(squares) || squares[i]) {
+        if (this.detectWinner(squares) || squares[i]) {
             return;
         }
         squares[i] = this.state.xIsNext ? 'X' : 'O';
+
+        if(player === 'user') {
+            const move = this.ai.minimax(squares, 'O').index;
+            console.log(move);
+            squares[move] = this.state.xIsNext ? 'O' : 'X';
+        }
+
         this.setState({
             history: history.concat([{
                 squares: squares,
             }]),
             stepNumber: history.length,
-            xIsNext: !this.state.xIsNext
+            //xIsNext: !this.state.xIsNext
         });
         this.setState((state) => {
-            console.log(state);
             this.localStorage1.setGameState(state);
         })
     }
 
-    calculateWinner = (squares) => {
+    detectWinner = (squares) => {
         const lines = [
             [0, 1, 2],
             [3, 4, 5],
@@ -54,6 +62,24 @@ export default class Game extends React.Component {
             }
         }
         return null;
+    }
+
+    isPlayerWinner = (board) => {
+        const player = 'X';
+        if(
+            (board[0] === player && board[1] === player && board[2] === player) ||
+            (board[3] === player && board[4] === player && board[5] === player) ||
+            (board[6] === player && board[7] === player && board[8] === player) ||
+            (board[0] === player && board[3] === player && board[6] === player) ||
+            (board[1] === player && board[4] === player && board[7] === player) ||
+            (board[2] === player && board[5] === player && board[8] === player) ||
+            (board[0] === player && board[4] === player && board[8] === player) ||
+            (board[2] === player && board[4] === player && board[6] === player)
+        ) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     jumpTo(step) {
@@ -79,7 +105,11 @@ export default class Game extends React.Component {
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
-        const winner = this.calculateWinner(current.squares);
+        const isVictory = this.detectWinner(current.squares);
+        let winner = false;
+        if (isVictory) {
+            winner = this.isPlayerWinner(current.squares);
+        }
 
         const moves = this.movesHistory(history);
 
@@ -90,9 +120,9 @@ export default class Game extends React.Component {
         }
 
         let clazz = 'game ';
-        if (winner) {
-            status = 'Winner: ' + winner;
-            sound = <WinSound />
+        if (isVictory) {
+            status = winner ? 'You win!' : 'You lose';
+            sound = winner ? <WinSound /> : <DrawSound />;
         } else if (current.squares.filter(value => value !== 'X' && value !== 'O').length === 0) {
             status = "Draw!";
             sound = <DrawSound />
