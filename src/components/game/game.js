@@ -17,10 +17,42 @@ export default class Game extends React.Component {
         this.state = this.localStorage1.getGameState();
     }
 
+    getCurrentSquares = () => {
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        const current = history[history.length - 1];
+        return current.squares.slice();
+    }
+
+    showGame = () => {
+        /*const squares = this.getCurrentSquares();
+        let empty = this._ReactBoardToLogicBoard(squares);
+
+        while (empty) {
+            const item = empty[Math.floor(Math.random()*squares.length)];
+            this.handleClick(item);
+            setTimeout(() => {
+                empty = this.getCurrentSquares();
+                empty = empty.filter(s => s !== "O" && s !== "X");
+            }, 2000);
+        }*/
+        //TODO
+    }
+
+    _ReactBoardToLogicBoard = (board) => {
+        return board.map((element, id) => {
+            if (element === 'X' || element === 'O') {
+                return element;
+            } else {
+                return id;
+            }
+        });
+    }
+
     handleClick = (i, player = 'user') => {
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const squares = current.squares.slice();
+
         if (this.detectWinner(squares) || squares[i]) {
             return;
         }
@@ -66,7 +98,7 @@ export default class Game extends React.Component {
 
     isPlayerWinner = (board) => {
         const player = 'X';
-        if(
+        return (
             (board[0] === player && board[1] === player && board[2] === player) ||
             (board[3] === player && board[4] === player && board[5] === player) ||
             (board[6] === player && board[7] === player && board[8] === player) ||
@@ -75,11 +107,7 @@ export default class Game extends React.Component {
             (board[2] === player && board[5] === player && board[8] === player) ||
             (board[0] === player && board[4] === player && board[8] === player) ||
             (board[2] === player && board[4] === player && board[6] === player)
-        ) {
-            return true;
-        } else {
-            return false;
-        }
+        );
     }
 
     jumpTo(step) {
@@ -141,14 +169,13 @@ export default class Game extends React.Component {
                         onClick={this.handleClick}
                     />
                     {status}
+                    <button onClick={this.showGame}>Show gameplay</button>
                 </div>
                 <Board
                     squares={current.squares}
                     onClick={(i) => this.handleClick(i)}
                 />
-                <div className="game__info">
-                    <ol>{moves}</ol>
-                </div>
+                <ol className="game__info">{moves}</ol>
 
             </div>
         );

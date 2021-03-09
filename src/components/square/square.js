@@ -12,14 +12,14 @@ const convertNumKeyboard = (number) => {
     }
 }
 
-const Square = (props) => {
+const Square = ( {onClick, value, id} ) => {
     return (
         <button
             className="square"
-            onClick={props.onClick}
+            onClick={onClick}
         >
-            {props.value}
-            <span className="square__key">{convertNumKeyboard(props.id)}</span>
+            {value}
+            <span className="square__key">{convertNumKeyboard(id)}</span>
         </button>
     );
 }
